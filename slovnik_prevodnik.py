@@ -1,5 +1,5 @@
 #slovník pro prevod osetreneho textu do morseovky
-slovník_prevodník = {
+slovník_morse = {
     # Písmena
     "A": ".-",
     "B": "-...",
@@ -41,6 +41,6 @@ slovník_prevodník = {
     "9": "----.",
     
     # znaky
-    " ": "/"
+    " ": "/",
     ".":"/"
     }
