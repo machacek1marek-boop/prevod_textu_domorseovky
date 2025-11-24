@@ -1,4 +1,4 @@
-#nahravani prevodníku
+#nahravani slovníku prevodníku
 from slovnik_prevodnik import slovník_morse
 text1 = input("napis text který chces prevest do morseokvy:")
 
