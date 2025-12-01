@@ -18,3 +18,12 @@ text2 = odstran_diakritiku(text1).upper()
 print("zredukovaný text:",text2)
 
 #prevod do morseovky
+morse_vysledek = ""
+
+for znak in text2:
+    if znak in slovník_morse:
+        morse_vysledek += slovník_morse[znak]
+    else:
+        morse_vysledek += "[" + znak + "]" + "/"
+        
+print("vysledný text",morse_vysledek)
