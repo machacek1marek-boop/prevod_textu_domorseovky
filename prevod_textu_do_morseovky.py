@@ -25,7 +25,9 @@ def prevod_do_morse():
         else:
             morse_vysledek += "[" + znak + "]" + "/"       
     print("vysledný text",morse_vysledek)
-    
+    # 4. Vymaž předchozí výsledek a zobraz nový
+    vystup_pole.delete("1.0", tk.END)  # vymaže obsah
+    vystup_pole.insert("1.0", morse_vysledek)  # vloží nový text
 
 # Vytvoření hlavního okna
 okno = tk.Tk()
@@ -46,10 +48,6 @@ tlacitko = tk.Button(okno, text="Převést do morseovky", command=prevod_do_mors
 tlacitko.pack(pady=10)
 
 # Popisek pro výstup
-    # 4. Vymaž předchozí výsledek a zobraz nový
-    vystup_pole.delete("1.0", tk.END)  # vymaže obsah
-    vystup_pole.insert("1.0", morse_vysledek)  # vloží nový text
-
 vystup_label = tk.Label(okno, text="Morseovka:", font=("Arial", 12))
 vystup_label.pack(pady=5)
 
