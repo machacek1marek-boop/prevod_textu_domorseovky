@@ -3,9 +3,6 @@ import tkinter as tk
 from slovnik_prevodnik import slovník_morse
 import unicodedata
 
-#zadaní textu
-text1 = vstup_pole.get() 
-
 #redukce textu diakritika a velká
 def odstran_diakritiku(text):
     normalizovany_text = unicodedata.normalize('NFD', text)
@@ -15,11 +12,13 @@ def odstran_diakritiku(text):
     )
 
     return text_bez_diakritiky.replace("đ", "d").replace("Đ", "D")
-text2 = odstran_diakritiku(text1).upper()
-print("zredukovaný text:",text2)
+    
 
 # Hlavní funkce pro převod
-def prevod_do_morse1():
+def prevod_do_morse():
+    text1 = vstup_pole.get()
+    text2 = odstran_diakritiku(text1).upper()
+    print("zredukovaný text:",text2)
     morse_vysledek = ""
     for znak in text2:
         if znak in slovník_morse:
@@ -27,10 +26,9 @@ def prevod_do_morse1():
         else:
             morse_vysledek += "[" + znak + "]" + "/"       
     print("vysledný text",morse_vysledek)
-    
-# 4. Vymaž předchozí výsledek a zobraz nový
-vystup_pole.delete("1.0", tk.END)  # vymaže obsah
-vystup_pole.insert("1.0", morse_vysledek)  # vloží nový text
+    # 4. Vymaž předchozí výsledek a zobraz nový
+        vystup_pole.delete("1.0", tk.END)  # vymaže obsah
+        vystup_pole.insert("1.0", morse_vysledek)  # vloží nový text
 
 # Vytvoření hlavního okna
 okno = tk.Tk()
@@ -46,7 +44,7 @@ vstup_pole = tk.Entry(okno, width=50, font=("Arial", 11))
 vstup_pole.pack(pady=5)
 
 # Tlačítko pro převod
-tlacitko = tk.Button(okno, text="Převést do morseovky", command=prevod_do_morse, 
+tlacitko = tk.Button(okno, text="Převést do morseovky", command=prevod_do_morse(), 
                      bg="lightblue", font=("Arial", 11))
 tlacitko.pack(pady=10)
 
