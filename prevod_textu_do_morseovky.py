@@ -16,6 +16,7 @@ def odstran_diakritiku(text):
 # Hlavní funkce pro převod
 def prevod_do_morse():
     text1 = vstup_pole.get()
+    print(text1)
     text2 = odstran_diakritiku(text1).upper()
     print("zredukovaný text:",text2)
     morse_vysledek = ""
@@ -25,7 +26,7 @@ def prevod_do_morse():
         else:
             morse_vysledek += "[" + znak + "]" + "/"       
     print("vysledný text",morse_vysledek)
-    # 4. Vymaž předchozí výsledek a zobraz nový
+    #Vymaž předchozí výsledek a zobraz nový
     vystup_pole.delete("1.0", tk.END)  # vymaže obsah
     vystup_pole.insert("1.0", morse_vysledek)  # vloží nový text
 
