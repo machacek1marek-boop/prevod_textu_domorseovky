@@ -20,7 +20,7 @@ slovnik_zpet[""] = " "
 
 # Hlavní funkce pro převod
 def prevod_na_text():
-    morse_pole = vstup2_pole.get("1.0", tk.END).strip()
+    morse_pole = vstup2_pole.get("1.0", "end-2c").strip()
     seznamkodu = morse_pole.split('/')
     
     morse_vysledek = ""
@@ -28,10 +28,10 @@ def prevod_na_text():
     for kod in seznamkodu:
         if kod in slovnik_zpet:
             morse_vysledek += slovnik_zpet[kod]
-        elif kod == "": # Dvojité lomítko // vytvoří prázdný řetězec při splitu
-            continue
+        elif kod == "" or kod.isspace(): # Dvojité lomítko // vytvoří prázdný retezec při splitu
+            continue 
         else:
-            morse_vysledek += "[" + kod + "]" + "/"       
+            morse_vysledek += "[" + kod + "]"
     #Vymaž předchozí výsledek a zobraz nový
     vstup1_pole.delete("1.0", tk.END)  # vymaže obsah
     vstup1_pole.insert("1.0", morse_vysledek)  # vloží nový text
@@ -39,7 +39,7 @@ def prevod_na_text():
 
 # Hlavní funkce pro převod
 def prevod_do_morse():
-    text1 = vstup1_pole.get("1.0", tk.END)
+    text1 = vstup1_pole.get("1.0", "end-1c")
     text2 = odstran_diakritiku(text1).upper()
     morse_vysledek = ""
     for znak in text2:
