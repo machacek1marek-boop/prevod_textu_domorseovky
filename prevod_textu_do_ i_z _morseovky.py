@@ -61,7 +61,8 @@ import time # Musíš přidat na začátek souboru
 # Proměnné pro sledování času
 cas_stisku = 0
 cas_posledni_aktivity = time.time()
-pismeno_ukonceno = True
+pismeno_ukonceno = True   
+
 
 def pri_stisku(event):
     global cas_stisku
@@ -79,65 +80,43 @@ def pri_uvolneni(event):
     
     cas_stisku = 0
     cas_posledni_aktivity = time.time()
-    pismeno_ukonceno = True 
+    pismeno_ukonceno = False  
 
 
 
-#hlavní funkce pro tukani
-def zaznam_morse():
-    # Proměnné pro sledování času
-    cas_stisku = 0
-    cas_posledni_aktivity = time.time()
-    pismeno_ukonceno = True
-    
-    tukani = ""
-    tukani += "."
-    vstup2_pole.insert("1.0", tukani)  # vloží vytukanou spravu
-
+    ##grafika a tlacitka
 # Vytvoření hlavního okna
 okno = tk.Tk()
 okno.title("Převodník do nebo z morseovky")
 okno.geometry("500x300")  # šířka x výška
 
 # Popisek pro vstup
-vstup1_label = tk.Label(okno, text="Text:", font=("Arial", 12))
-vstup1_label.place(x=230, y=10)
+vstup1_label = tk.Label(okno, text="Text:", font=("Arial", 12)); vstup1_label.place(x=230, y=10)
 
 # Vstupní textové pole
-vstup1_pole = tk.Text(okno, height=2, width=50, font=("Arial", 11))
-vstup1_pole.place(x=50, y=35)
+vstup1_pole = tk.Text(okno, height=2, width=50, font=("Arial", 11)); vstup1_pole.place(x=50, y=35)
 
 
 # Tlačítko pro převod do morse 
-tlacitko1 = tk.Button(okno, text="↓ Převést do morse ↓", command=prevod_do_morse, 
-                     bg="lightblue", font=("Arial", 11))
-tlacitko1.pack(pady=10)
-tlacitko1.place(x=330, y=100)
+tlacitko1 = tk.Button(okno, text="↓ Převést do morse ↓", command=prevod_do_morse, bg="lightblue", font=("Arial", 11)); tlacitko1.pack(pady=10); tlacitko1.place(x=330, y=100)
 
 # Tlačítko pro převod nba text
-tlacitko2 = tk.Button(okno, text="↑ Převést na text ↑", command=prevod_na_text, 
-                     bg="lightblue", font=("Arial", 11))
-tlacitko2.place(x=20, y=100)
+tlacitko2 = tk.Button(okno, text="↑ Převést na text ↑", command=prevod_na_text, bg="lightblue", font=("Arial", 11)); tlacitko2.place(x=20, y=100)
 
 # Popisek pro výstup
-vstup2_label = tk.Label(okno, text="Morseovka:", font=("Arial", 12))
-vstup2_label.place(x=205, y=150)
+vstup2_label = tk.Label(okno, text="Morseovka:", font=("Arial", 12)); vstup2_label.place(x=205, y=150)
 
 # Výstupní textové pole (větší, pro více řádků)
-vstup2_pole = tk.Text(okno, height=5, width=50, font=("Courier", 10))
-vstup2_pole.place(x=50, y=180)
+vstup2_pole = tk.Text(okno, height=5, width=50, font=("Courier", 10)); vstup2_pole.place(x=50, y=180)
 
 # Tlačítko pro smazání všeho 
-tlacitko3 = tk.Button(okno, text="smazat vše", command=mazani_vse,
-                      bg="salmon", font=("Arial", 11))
-tlacitko3.place(x=200, y=100)
+tlacitko3 = tk.Button(okno, text="smazat vše", command=mazani_vse, bg="salmon", font=("Arial", 11)); tlacitko3.place(x=200, y=100)
 
 # Popisek pro vytukavač
-vytukavac_label = tk.Label(okno, text="Tlačítko na zapis morse:", font=("Arial", 12))
-vytukavac_label.place(x=560, y=170)
+vytukavac_label = tk.Label(okno, text="Tlačítko na zapis morse:", font=("Arial", 12)); vytukavac_label.place(x=560, y=170)
 
 # Tlačítko pro zapis morse (vytukavac)
-vytukavac = tk.Button(okno, text="ťukej kod", bg="green", font=("Arial", 11))
+vytukavac = tk.Button(okno, text="ťukej kod", bg="green", font=("Arial", 11)); vytukavac.place(x=600, y=200)
 vytukavac.bind("<ButtonPress-1>", pri_stisku)
 vytukavac.bind("<ButtonRelease-1>", pri_uvolneni)
 vytukavac.place(x=600, y=200)
@@ -148,17 +127,18 @@ def kontrola_pauzy():
     pauza = nyni - cas_posledni_aktivity
     
     # Pokud uživatel nic nedělá déle než 1.2 sekundy, ukonči písmeno
-    if not pismeno_ukonceno and pauza > 1.2:
+    if not pismeno_ukonceno and pauza > 1:
         vstup2_pole.insert(tk.END, "/")
-        pismeno_ukonceno = True
-    
+        
+        cas_stisku = 0
+        cas_posledni_aktivity = time.time()
+        pismeno_ukonceno = False 
+        
     # Opakuj kontrolu každých 100ms
     okno.after(100, kontrola_pauzy)
 
 # Spuštění automatické kontroly pauzy
 kontrola_pauzy()
 
-
-okno.geometry("800x300")
 # Spuštění programu
 okno.mainloop()
