@@ -60,19 +60,22 @@ import time # Musíš přidat na začátek souboru
 
 # Proměnné pro sledování času
 cas_stisku = 0
-cas_posledni_aktivity = time.time()
-pismeno_ukonceno = True   
-
+cas_posledni_aktivity = time.time()  
+pocet_predelu_v_kuse = 3
+nic_se_nedeje = False 
 
 def pri_stisku(event):
-    global cas_stisku
+    global cas_stisku, pauza, cas_posledni_aktivity, nic_se_nedeje
+    cas_posledni_aktivity = time.time()
+    nic_se_nedeje = False
     if cas_stisku == 0: # Zabrání opakování při držení klávesy
         cas_stisku = time.time()
 
 def pri_uvolneni(event):
-    global cas_stisku, cas_posledni_aktivity, pismeno_ukonceno
+    global cas_stisku, cas_posledni_aktivity, pismeno_ukonceno, pocet_predelu_v_kuse, nic_se_nedeje
     trvani = time.time() - cas_stisku
-    
+    pocet_predelu_v_kuse = 0
+    nic_se_nedeje = True 
     if trvani < 0.3:
         vstup2_pole.insert(tk.END, ".")
     else:
@@ -80,8 +83,6 @@ def pri_uvolneni(event):
     
     cas_stisku = 0
     cas_posledni_aktivity = time.time()
-    pismeno_ukonceno = False  
-
 
 
     ##grafika a tlacitka
@@ -122,18 +123,16 @@ vytukavac.bind("<ButtonRelease-1>", pri_uvolneni)
 vytukavac.place(x=600, y=200)
 
 def kontrola_pauzy():
-    global cas_posledni_aktivity, pismeno_ukonceno
+    global cas_posledni_aktivity, pismeno_ukonceno, cas_stisku, pocet_predelu_v_kuse, pauza, nic_se_nedeje
     nyni = time.time()
     pauza = nyni - cas_posledni_aktivity
     
-    # Pokud uživatel nic nedělá déle než 1.2 sekundy, ukonči písmeno
-    if not pismeno_ukonceno and pauza > 1:
-        vstup2_pole.insert(tk.END, "/")
-        
-        cas_stisku = 0
+    # Pokud uživatel nic nedělá déle než 1. sekundy, ukonči písmeno
+    if nic_se_nedeje and  pauza > 1 and pocet_predelu_v_kuse <3:
+        vstup2_pole.insert(tk.END, "/")      
         cas_posledni_aktivity = time.time()
         pismeno_ukonceno = False 
-        
+        pocet_predelu_v_kuse += 1
     # Opakuj kontrolu každých 100ms
     okno.after(100, kontrola_pauzy)
 
