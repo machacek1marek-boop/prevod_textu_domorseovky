@@ -2,6 +2,7 @@
 import tkinter as tk
 from slovnik_prevodnik import slovník_morse
 import unicodedata
+import time
 
 #redukce textu diakritika a velká
 def odstran_diakritiku(text):
@@ -55,6 +56,44 @@ def mazani_vse():
     vstup2_pole.delete("1.0", tk.END)
     vstup1_pole.delete("1.0", tk.END)
 
+import time # Musíš přidat na začátek souboru
+
+# Proměnné pro sledování času
+cas_stisku = 0
+cas_posledni_aktivity = time.time()
+pismeno_ukonceno = True
+
+def pri_stisku(event):
+    global cas_stisku
+    if cas_stisku == 0: # Zabrání opakování při držení klávesy
+        cas_stisku = time.time()
+
+def pri_uvolneni(event):
+    global cas_stisku, cas_posledni_aktivity, pismeno_ukonceno
+    trvani = time.time() - cas_stisku
+    
+    if trvani < 0.3:
+        vstup2_pole.insert(tk.END, ".")
+    else:
+        vstup2_pole.insert(tk.END, "-")
+    
+    cas_stisku = 0
+    cas_posledni_aktivity = time.time()
+    pismeno_ukonceno = True 
+
+
+
+#hlavní funkce pro tukani
+def zaznam_morse():
+    # Proměnné pro sledování času
+    cas_stisku = 0
+    cas_posledni_aktivity = time.time()
+    pismeno_ukonceno = True
+    
+    tukani = ""
+    tukani += "."
+    vstup2_pole.insert("1.0", tukani)  # vloží vytukanou spravu
+
 # Vytvoření hlavního okna
 okno = tk.Tk()
 okno.title("Převodník do nebo z morseovky")
@@ -62,11 +101,11 @@ okno.geometry("500x300")  # šířka x výška
 
 # Popisek pro vstup
 vstup1_label = tk.Label(okno, text="Text:", font=("Arial", 12))
-vstup1_label.pack(pady=5)
+vstup1_label.place(x=230, y=10)
 
 # Vstupní textové pole
 vstup1_pole = tk.Text(okno, height=2, width=50, font=("Arial", 11))
-vstup1_pole.pack(pady=5)
+vstup1_pole.place(x=50, y=35)
 
 
 # Tlačítko pro převod do morse 
@@ -78,12 +117,11 @@ tlacitko1.place(x=330, y=100)
 # Tlačítko pro převod nba text
 tlacitko2 = tk.Button(okno, text="↑ Převést na text ↑", command=prevod_na_text, 
                      bg="lightblue", font=("Arial", 11))
-tlacitko2.pack(pady=10)
 tlacitko2.place(x=20, y=100)
 
 # Popisek pro výstup
 vstup2_label = tk.Label(okno, text="Morseovka:", font=("Arial", 12))
-vstup2_label.pack(pady=70)
+vstup2_label.place(x=205, y=150)
 
 # Výstupní textové pole (větší, pro více řádků)
 vstup2_pole = tk.Text(okno, height=5, width=50, font=("Courier", 10))
@@ -94,5 +132,33 @@ tlacitko3 = tk.Button(okno, text="smazat vše", command=mazani_vse,
                       bg="salmon", font=("Arial", 11))
 tlacitko3.place(x=200, y=100)
 
+# Popisek pro vytukavač
+vytukavac_label = tk.Label(okno, text="Tlačítko na zapis morse:", font=("Arial", 12))
+vytukavac_label.place(x=560, y=170)
+
+# Tlačítko pro zapis morse (vytukavac)
+vytukavac = tk.Button(okno, text="ťukej kod", bg="green", font=("Arial", 11))
+vytukavac.bind("<ButtonPress-1>", pri_stisku)
+vytukavac.bind("<ButtonRelease-1>", pri_uvolneni)
+vytukavac.place(x=600, y=200)
+
+def kontrola_pauzy():
+    global cas_posledni_aktivity, pismeno_ukonceno
+    nyni = time.time()
+    pauza = nyni - cas_posledni_aktivity
+    
+    # Pokud uživatel nic nedělá déle než 1.2 sekundy, ukonči písmeno
+    if not pismeno_ukonceno and pauza > 1.2:
+        vstup2_pole.insert(tk.END, "/")
+        pismeno_ukonceno = True
+    
+    # Opakuj kontrolu každých 100ms
+    okno.after(100, kontrola_pauzy)
+
+# Spuštění automatické kontroly pauzy
+kontrola_pauzy()
+
+
+okno.geometry("800x300")
 # Spuštění programu
 okno.mainloop()
