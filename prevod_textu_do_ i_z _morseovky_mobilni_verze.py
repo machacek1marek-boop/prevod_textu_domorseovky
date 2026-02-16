@@ -32,10 +32,9 @@ slovnik_zpet[""] = " "
 def prevod_na_text():
     # Načtení a vyčištění (používáme end-1c dle tvých souborů)
     morse_pole = vstup2_pole.get("1.0", "end-1c").rstrip()
-    seznam_kodu = morse_pole.rstrip().split('/')
-    nic = ""
-    
+    seznam_kodu = morse_pole.split('/')
     vstup1_pole.delete("1.0", tk.END)
+    cast_vysledku = ""
     skip = False 
 
     for i in range(len(seznam_kodu)):
@@ -47,16 +46,19 @@ def prevod_na_text():
         
         if kod == "":
             if i + 1 < len(seznam_kodu) and seznam_kodu[i+1] == "":
-                vstup1_pole.insert(tk.END, ".") # Tečka (///)
+                cast_vysledku += "." # Tečka (///)
                 skip = True 
             else:
-                vstup1_pole.insert(tk.END, " ") # Mezera (//)
+                cast_vysledku += " " # Mezera (//)
         elif kod in slovnik_zpet:
             # Vložíme znak ze slovníku
-            vstup1_pole.insert(tk.END, slovnik_zpet[kod])
+            cast_vysledku += slovnik_zpet[kod]
         else:
             # Tady vložíme text s barvou bez nutnosti složité proměnné
+            vstup1_pole.insert(tk.END, cast_vysledku)
             vstup1_pole.insert(tk.END, kod, "red")
+            cast_vysledku = ""
+    vstup1_pole.insert(tk.END, cast_vysledku.rstrip())
 
 # Hlavní funkce pro převod
 def prevod_do_morse():
