@@ -99,6 +99,20 @@ def pri_uvolneni(event):
     cas_stisku = 0
     cas_posledni_aktivity = time.time()
 
+def zmnena_rozhrani():
+    if mobil == True:
+        mobil = False
+    else:
+        mobil = True
+    
+    if mobil == True:
+        sloupec = 0
+        okno.mainloop()
+    else:
+        sloupec = 1
+        okno.mainloop()
+
+mobil = True  
     ##grafika a tlacitka
 # Vytvoření hlavního okna
 okno = tk.Tk()
@@ -113,9 +127,10 @@ okno.grid_rowconfigure(3, weight=0)  # Label
 okno.grid_rowconfigure(4, weight=1)  # Textové pole (roztáhne se)
 okno.grid_rowconfigure(5, weight=0)  # Lable
 okno.grid_rowconfigure(6, weight=0)  # Vytukávač
+okno.grid_rowconfigure(7, weight=0)  # zmnena rozhraní
 
 okno.grid_columnconfigure(0, weight=1)  # Sloupec se roztáhne
-
+ 
 # Popisek pro vstup
 vstup1_label = tk.Label(okno, text="Text:", font=("Arial", 12))
 vstup1_label.grid(row=0, column=0, pady=(10, 2))
@@ -129,7 +144,7 @@ frame_tlacitka = tk.Frame(okno)
 frame_tlacitka.grid(row=2, column=0, pady=8)
 
 # Tlačítko pro převod do morse 
-tlacitko1 = tk.Button(frame_tlacitka, text="↓ Převést do morse ↓", bg="lightblue", font=("Arial", 11), command=prevod_do_morse)
+tlacitko1 = tk.Button(frame_tlacitka, text="↓Převést do morse↓", bg="lightblue", font=("Arial", 11), command=prevod_do_morse)
 tlacitko1.pack(side="left", padx=5)
 
 # Tlačítko pro smazání všeho
@@ -137,7 +152,7 @@ tlacitko2 = tk.Button(frame_tlacitka, text="smazat vše", bg="salmon", font=("Ar
 tlacitko2.pack(side="left", padx=5)
  
 # Tlačítko pro převod nba text
-tlacitko3 = tk.Button(frame_tlacitka, text="↑ Převést na text ↑",  bg="lightblue", font=("Arial", 11), command=prevod_na_text)
+tlacitko3 = tk.Button(frame_tlacitka, text="↑Převést na text↑",  bg="lightblue", font=("Arial", 11), command=prevod_na_text)
 tlacitko3.pack(side="left", padx=5)
 
 
@@ -151,13 +166,17 @@ vstup2_pole.grid(row=4, column=0, padx=20, pady=5, sticky="nsew")
 
 # Popisek pro vytukavač
 vytukavac_label = tk.Label(okno, text="Tlačítko na zapis morse:", font=("Arial", 8))
-vytukavac_label.grid(row=5, column=0, pady=(20, 5))
+vytukavac_label.grid(row=5, column=sloupec, pady=(20, 5))
 
 # Tlačítko pro zapis morse (vytukavac)
 vytukavac = tk.Button(okno, text="ťukej kod", bg="green", font=("Arial", 11))
 vytukavac.bind("<ButtonPress-1>", pri_stisku)
 vytukavac.bind("<ButtonRelease-1>", pri_uvolneni)
-vytukavac.grid(row=6, column=0, pady=(5, 50))
+vytukavac.grid(row=6, column=sloupec, pady=(5, 50))
+
+# Tlačítko pro změnu rozhraní
+tlacitko5 = tk.Button(text="změna rozhraní", bg="salmon", font=("Arial", 11), command=zmnena_rozhrani)
+tlacitko5.grid(row=7, column=0, pady=10)
 
 #tagy barev
 vstup1_pole.tag_config("red", foreground="red")
