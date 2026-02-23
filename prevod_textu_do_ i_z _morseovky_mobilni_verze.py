@@ -75,7 +75,8 @@ def prevod_do_morse():
 def mazani_vse():
     vstup2_pole.delete("1.0", tk.END)
     vstup1_pole.delete("1.0", tk.END)
-
+    
+cas_stisku = 0
 def pri_stisku(event):
     global cas_stisku, pauza, cas_posledni_aktivity, lomitko_zadanee
     cas_posledni_aktivity = time.time()
@@ -98,90 +99,175 @@ def pri_uvolneni(event):
     
     cas_stisku = 0
     cas_posledni_aktivity = time.time()
-
-def zmnena_rozhrani():
-    if mobil == True:
-        mobil = False
-    else:
-        mobil = True
     
-    if mobil == True:
-        sloupec = 0
-        okno.mainloop()
-    else:
-        sloupec = 1
-        okno.mainloop()
+def zozhrani_mobil():
+    global vstup1_pole, vstup2_pole, okno
+    ##grafika a tlacitka
+    # Vytvoření hlavního okna
+    okno = tk.Tk()
+    okno.title("Převodník do nebo z morseovky mobil")
+    okno.geometry("400x800")
+    
+    # Konfigurace gridu pro responzivitu
+    okno.grid_rowconfigure(0, weight=0)  # zmnena rozhraní
+    okno.grid_rowconfigure(1, weight=0)  # Label
+    okno.grid_rowconfigure(2, weight=0)  # Textové pole
+    okno.grid_rowconfigure(3, weight=0)  # Tlačítka
+    okno.grid_rowconfigure(4, weight=0)  # Label
+    okno.grid_rowconfigure(5, weight=0)  # Textové pole (roztáhne se)
+    okno.grid_rowconfigure(6, weight=1)  # Lable
+    okno.grid_rowconfigure(7, weight=0)  # Vytukávač
+ 
+    okno.grid_columnconfigure(0, weight=1)  # Sloupec se roztáhne
+        # Tlačítko pro změnu rozhraní
+    tlacitko5 = tk.Button(text="změna rozhraní", bg="red", font=("Arial", 11), command=zmnena_rozhrani)
+    tlacitko5.grid(row=0, column=0, pady=(10, 2))
+
+     # komentar roz
+    label = tk.Label(okno, text= mobil, font=("Arial", 12))
+    label.grid(row=0, column=1, pady=(10, 2))
+     
+    # Popisek pro vstup
+    vstup1_label = tk.Label(okno, text="Text:", font=("Arial", 12))
+    vstup1_label.grid(row=1, column=0, pady=(10, 2))
+    
+    # Vstupní textové pole - sticky="nsew" = roztáhne se na všechny strany
+    vstup1_pole = tk.Text(okno, height=2, font=("Arial", 11))
+    vstup1_pole.grid(row=2, column=0, padx=20, pady=5, sticky="ew")
+    
+    # Frame pro tlačítka (aby byla vedle sebe)
+    frame_tlacitka = tk.Frame(okno)
+    frame_tlacitka.grid(row=3, column=0, pady=8)
+    
+    # Tlačítko pro převod do morse 
+    tlacitko1 = tk.Button(frame_tlacitka, text="↓Do morse↓", bg="lightblue", font=("Arial", 11), command=prevod_do_morse)
+    tlacitko1.pack(side="left", padx=5)
+    
+    # Tlačítko pro smazání všeho
+    tlacitko2 = tk.Button(frame_tlacitka, text="smazat vše", bg="salmon", font=("Arial", 11), command=mazani_vse)
+    tlacitko2.pack(side="left", padx=5)
+     
+    # Tlačítko pro převod nba text
+    tlacitko3 = tk.Button(frame_tlacitka, text="↑Na text↑",  bg="lightblue", font=("Arial", 11), command=prevod_na_text)
+    tlacitko3.pack(side="left", padx=5)
+     
+    # Popisek pro výstup
+    vstup2_label = tk.Label(okno, text="Morseovka:", font=("Arial", 12))
+    vstup2_label.grid(row=4, column=0, pady=(10, 5))
+    
+    # Výstupní morse pole
+    vstup2_pole = tk.Text(okno, height=5, font=("Courier", 10))
+    vstup2_pole.grid(row=5, column=0, padx=20, pady=5, sticky="nsew")
+    
+    # Popisek pro vytukavač
+    vytukavac_label = tk.Label(okno, text="Tlačítko na zapis morse:", font=("Arial", 8))
+    vytukavac_label.grid(row=6, column=0, pady=(2, 5))
+    
+    # Tlačítko pro zapis morse (vytukavac)
+    vytukavac = tk.Button(okno, text="ťukej kod", bg="green", font=("Arial", 11))
+    vytukavac.bind("<ButtonPress-1>", pri_stisku)
+    vytukavac.bind("<ButtonRelease-1>", pri_uvolneni)
+    vytukavac.grid(row=7, column=0, pady=(5, 20))
+    
+    #tagy barev
+    vstup1_pole.tag_config("red", foreground="red")
+    vstup2_pole.tag_config("red", foreground="red")
+    
+    kontrola_pauzy()
+    okno.after(100, kontrola_pauzy)
+      
+    # Spuštění programu
+    okno.mainloop()
+
+def rozhrani_pocitac():
+    global vstup1_pole, vstup2_pole, p_okno
+    ##grafika a tlacitka
+    # Vytvoření hlavního okna
+    p_okno = tk.Tk()
+    p_okno.title("Převodník do nebo z morseovky pocitac")
+    p_okno.geometry("800x500")
+    
+    # Konfigurace gridu pro responzivitu
+    p_okno.grid_rowconfigure(0, weight=0)  # zmnena rozhraní
+    p_okno.grid_rowconfigure(1, weight=0)  # Label
+    p_okno.grid_rowconfigure(2, weight=0)  # Textové pole
+    p_okno.grid_rowconfigure(3, weight=0)  # Tlačítka
+    p_okno.grid_rowconfigure(4, weight=0)  # Label
+    p_okno.grid_rowconfigure(5, weight=0)  # Textové pole (roztáhne se)
+
+    p_okno.grid_columnconfigure(0, weight=1)  # Sloupec se roztáhne
+        # Tlačítko pro změnu rozhraní
+    tlacitko5 = tk.Button(text="změna rozhraní", bg="salmon", font=("Arial", 11), command=zmnena_rozhrani)
+    tlacitko5.grid(row=0, column=0, pady=(10, 2))
+
+     # komentar roz
+    label = tk.Label(p_okno, text= mobil, font=("Arial", 12))
+    label.grid(row=0, column=1, pady=(10, 2))
+     
+    # Popisek pro vstup
+    vstup1_label = tk.Label(p_okno, text="Text:", font=("Arial", 12))
+    vstup1_label.grid(row=1, column=0, pady=(10, 2))
+    
+    # Vstupní textové pole - sticky="nsew" = roztáhne se na všechny strany
+    vstup1_pole = tk.Text(p_okno, height=2, font=("Arial", 11))
+    vstup1_pole.grid(row=2, column=0, padx=20, pady=5, sticky="ew")
+    
+    # Frame pro tlačítka (aby byla vedle sebe)
+    frame_tlacitka = tk.Frame(p_okno)
+    frame_tlacitka.grid(row=3, column=0, pady=8)
+    
+    # Tlačítko pro převod do morse 
+    tlacitko1 = tk.Button(frame_tlacitka, text="↓Převod do morse↓", bg="lightblue", font=("Arial", 11), command=prevod_do_morse)
+    tlacitko1.pack(side="left", padx=5)
+    
+    # Tlačítko pro smazání všeho
+    tlacitko2 = tk.Button(frame_tlacitka, text="smazat vše", bg="salmon", font=("Arial", 11), command=mazani_vse)
+    tlacitko2.pack(side="left", padx=5)
+     
+    # Tlačítko pro převod nba text
+    tlacitko3 = tk.Button(frame_tlacitka, text="↑převod na text↑",  bg="lightblue", font=("Arial", 11), command=prevod_na_text)
+    tlacitko3.pack(side="left", padx=5)
+     
+    # Popisek pro výstup
+    vstup2_label = tk.Label(p_okno, text="Morseovka:", font=("Arial", 12))
+    vstup2_label.grid(row=4, column=0, pady=(10, 5))
+    
+    # Výstupní morse pole
+    vstup2_pole = tk.Text(p_okno, height=5, font=("Courier", 10))
+    vstup2_pole.grid(row=5, column=0, padx=20, pady=5, sticky="nsew")
+    
+    # Popisek pro vytukavač
+    vytukavac_label = tk.Label(p_okno, text="Tlačítko na zapis morse:", font=("Arial", 8))
+    vytukavac_label.grid(row=3, column=1, pady=0)
+    
+    # Tlačítko pro zapis morse (vytukavac)
+    vytukavac = tk.Button(p_okno, text="ťukej kod", bg="green", font=("Arial", 11))
+    vytukavac.bind("<ButtonPress-1>", pri_stisku)
+    vytukavac.bind("<ButtonRelease-1>", pri_uvolneni)
+    vytukavac.grid(row=4, column=1, padx=35, pady=0)
+    
+    #tagy barev
+    vstup1_pole.tag_config("red", foreground="red")
+    vstup2_pole.tag_config("red", foreground="red")
+    
+    kontrola_pauzy()
+    p_okno.after(100, kontrola_pauzy)
+      
+    # Spuštění programu
+    p_okno.mainloop()
+    
 
 mobil = True  
-    ##grafika a tlacitka
-# Vytvoření hlavního okna
-okno = tk.Tk()
-okno.title("Převodník do nebo z morseovky")
-okno.geometry("800x600")
-
-# Konfigurace gridu pro responzivitu
-okno.grid_rowconfigure(0, weight=0)  # Label
-okno.grid_rowconfigure(1, weight=0)  # Textové pole
-okno.grid_rowconfigure(2, weight=0)  # Tlačítka
-okno.grid_rowconfigure(3, weight=0)  # Label
-okno.grid_rowconfigure(4, weight=1)  # Textové pole (roztáhne se)
-okno.grid_rowconfigure(5, weight=0)  # Lable
-okno.grid_rowconfigure(6, weight=0)  # Vytukávač
-okno.grid_rowconfigure(7, weight=0)  # zmnena rozhraní
-
-okno.grid_columnconfigure(0, weight=1)  # Sloupec se roztáhne
- 
-# Popisek pro vstup
-vstup1_label = tk.Label(okno, text="Text:", font=("Arial", 12))
-vstup1_label.grid(row=0, column=0, pady=(10, 2))
-
-# Vstupní textové pole - sticky="nsew" = roztáhne se na všechny strany
-vstup1_pole = tk.Text(okno, height=2, font=("Arial", 11))
-vstup1_pole.grid(row=1, column=0, padx=20, pady=5, sticky="ew")
-
-# Frame pro tlačítka (aby byla vedle sebe)
-frame_tlacitka = tk.Frame(okno)
-frame_tlacitka.grid(row=2, column=0, pady=8)
-
-# Tlačítko pro převod do morse 
-tlacitko1 = tk.Button(frame_tlacitka, text="↓Převést do morse↓", bg="lightblue", font=("Arial", 11), command=prevod_do_morse)
-tlacitko1.pack(side="left", padx=5)
-
-# Tlačítko pro smazání všeho
-tlacitko2 = tk.Button(frame_tlacitka, text="smazat vše", bg="salmon", font=("Arial", 11), command=mazani_vse)
-tlacitko2.pack(side="left", padx=5)
- 
-# Tlačítko pro převod nba text
-tlacitko3 = tk.Button(frame_tlacitka, text="↑Převést na text↑",  bg="lightblue", font=("Arial", 11), command=prevod_na_text)
-tlacitko3.pack(side="left", padx=5)
-
-
-# Popisek pro výstup
-vstup2_label = tk.Label(okno, text="Morseovka:", font=("Arial", 12))
-vstup2_label.grid(row=3, column=0, pady=(10, 5))
-
-# Výstupní morse pole
-vstup2_pole = tk.Text(okno, height=5, font=("Courier", 10))
-vstup2_pole.grid(row=4, column=0, padx=20, pady=5, sticky="nsew")
-
-# Popisek pro vytukavač
-vytukavac_label = tk.Label(okno, text="Tlačítko na zapis morse:", font=("Arial", 8))
-vytukavac_label.grid(row=5, column=sloupec, pady=(20, 5))
-
-# Tlačítko pro zapis morse (vytukavac)
-vytukavac = tk.Button(okno, text="ťukej kod", bg="green", font=("Arial", 11))
-vytukavac.bind("<ButtonPress-1>", pri_stisku)
-vytukavac.bind("<ButtonRelease-1>", pri_uvolneni)
-vytukavac.grid(row=6, column=sloupec, pady=(5, 50))
-
-# Tlačítko pro změnu rozhraní
-tlacitko5 = tk.Button(text="změna rozhraní", bg="salmon", font=("Arial", 11), command=zmnena_rozhrani)
-tlacitko5.grid(row=7, column=0, pady=10)
-
-#tagy barev
-vstup1_pole.tag_config("red", foreground="red")
-vstup2_pole.tag_config("red", foreground="red")
-
+def zmnena_rozhrani():
+    global mobil
+    if mobil:
+        okno.destroy()
+        mobil = False
+        rozhrani_pocitac()
+    else:
+        p_okno.destroy()
+        mobil = True
+        zozhrani_mobil()
 
 # Proměnné pro sledování času
 cas_stisku = 0
@@ -199,11 +285,5 @@ def kontrola_pauzy():
         vstup2_pole.insert(tk.END, "/")      
         cas_posledni_aktivity = time.time() 
         pocet_predelu_v_kuse += 1
-    # Opakuj kontrolu každých 100ms
-    okno.after(100, kontrola_pauzy)
-
-# Spuštění automatické kontroly pauzy
-kontrola_pauzy()
-
-# Spuštění programu
-okno.mainloop()
+    
+zozhrani_mobil()     
