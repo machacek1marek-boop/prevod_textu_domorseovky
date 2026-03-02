@@ -75,10 +75,14 @@ def prevod_do_morse():
 def mazani_vse():
     vstup2_pole.delete("1.0", tk.END)
     vstup1_pole.delete("1.0", tk.END)
-    
+  
+#promněnné
+mobil = True
+max_doba_tecky = 0.3
+max_doba_carky = 1.5
 cas_stisku = 0
 def pri_stisku(event):
-    global cas_stisku, pauza, cas_posledni_aktivity, lomitko_zadanee
+    global cas_stisku, cas_posledni_aktivity, lomitko_zadanee
     cas_posledni_aktivity = time.time()
     lomitko_zadanee = False
     if cas_stisku == 0: # Zabrání opakování při držení klávesy
@@ -89,9 +93,9 @@ def pri_uvolneni(event):
     trvani = time.time() - cas_stisku
     pocet_predelu_v_kuse = 0
     lomitko_zadanee = True 
-    if trvani < 0.3:
+    if trvani < max_doba_tecky:
         vstup2_pole.insert(tk.END, ".")
-    elif 0.3 <= trvani < 1.5:
+    elif max_doba_tecky <= trvani < max_doba_carky:
         vstup2_pole.insert(tk.END, "-")
     else:
         vstup2_pole.insert(tk.END, "///")
@@ -99,6 +103,19 @@ def pri_uvolneni(event):
     
     cas_stisku = 0
     cas_posledni_aktivity = time.time()
+    
+#kopirováni
+def kopirovat_text():
+    obsah = vstup1_pole.get("1.0", "end-1c")
+    okno_aktivni = okno if mobil else p_okno
+    okno_aktivni.clipboard_clear()
+    okno_aktivni.clipboard_append(obsah)
+
+def kopirovat_morse():
+    obsah = vstup2_pole.get("1.0", "end-1c")
+    okno_aktivni = okno if mobil else p_okno
+    okno_aktivni.clipboard_clear()
+    okno_aktivni.clipboard_append(obsah)
     
 def zozhrani_mobil():
     global vstup1_pole, vstup2_pole, okno
@@ -115,7 +132,7 @@ def zozhrani_mobil():
     okno.grid_rowconfigure(3, weight=0)  # Tlačítka
     okno.grid_rowconfigure(4, weight=0)  # Label
     okno.grid_rowconfigure(5, weight=0)  # Textové pole (roztáhne se)
- 
+    
     okno.grid_columnconfigure(0, weight=1)  # Sloupec se roztáhne
         # Tlačítko pro změnu rozhraní
     tlacitko5 = tk.Button(text="změna rozhraní", bg="red", font=("Arial", 8), command=zmnena_rozhrani)
@@ -132,6 +149,9 @@ def zozhrani_mobil():
     # Vstupní textové pole - sticky="nsew" = roztáhne se na všechny strany
     vstup1_pole = tk.Text(okno, height=2, font=("Arial", 11))
     vstup1_pole.grid(row=2, column=0, padx=20, pady=5, sticky="ew")
+    #kopirovací tlac 1
+    tlacitko_kop1 = tk.Button(okno, text="📋 ", bg="lightyellow", font=("Arial", 8), command=kopirovat_text)
+    tlacitko_kop1.grid(row=2, column=1, pady=(0, 40))
     
     # Frame pro tlačítka (aby byla vedle sebe)
     frame_tlacitka = tk.Frame(okno)
@@ -156,6 +176,9 @@ def zozhrani_mobil():
     # Výstupní morse pole
     vstup2_pole = tk.Text(okno, height=5, font=("Courier", 10))
     vstup2_pole.grid(row=5, column=0, padx=20, pady=5, sticky="nsew")
+    #kopirovaci tlac 2
+    tlacitko_kop2 = tk.Button(okno, text="📋", bg="lightyellow", font=("Arial", 8), command=kopirovat_morse)
+    tlacitko_kop2.grid(row=5, column=1, pady=(0, 70))
     
     # Popisek pro vytukavač
     vytukavac_label = tk.Label(okno, text="Tlačítko na zápis morseovky:", font=("Arial", 8))
@@ -166,6 +189,7 @@ def zozhrani_mobil():
     vytukavac.bind("<ButtonPress-1>", pri_stisku)
     vytukavac.bind("<ButtonRelease-1>", pri_uvolneni)
     vytukavac.grid(row=7, column=0, pady=(2, 20))
+    
     
     #tagy barev
     vstup1_pole.tag_config("red", foreground="red")
@@ -209,7 +233,10 @@ def rozhrani_pocitac():
     # Vstupní textové pole - sticky="nsew" = roztáhne se na všechny strany
     vstup1_pole = tk.Text(p_okno, height=3, font=("Arial", 11))
     vstup1_pole.grid(row=2, column=0, padx=20, pady=5, sticky="ew")
-    
+    #kopirovaci tlac 1
+    tlacitko_kop1 = tk.Button(p_okno, text="📋", bg="lightyellow", font=("Arial", 8), command=kopirovat_text)
+    tlacitko_kop1.grid(row=2, column=1,padx=(0, 150), pady=(0, 55))
+     
     # Frame pro tlačítka (aby byla vedle sebe)
     frame_tlacitka = tk.Frame(p_okno)
     frame_tlacitka.grid(row=3, column=0, pady=8)
@@ -232,7 +259,11 @@ def rozhrani_pocitac():
     # Výstupní morse pole
     vstup2_pole = tk.Text(p_okno, height=5, font=("Courier", 10))
     vstup2_pole.grid(row=5, column=0, padx=20, pady=(5, 20), sticky="nsew")
+    #kopirovaci tlac 2
+    tlacitko_kop2 = tk.Button(p_okno, text="📋", bg="lightyellow", font=("Arial", 8), command=kopirovat_morse)
+    tlacitko_kop2.grid(row=5, column=1, padx=(0, 150), pady=(0, 220))
     
+
     # Popisek pro vytukavač
     vytukavac_label = tk.Label(p_okno, text="Tlačítko na zápis morseovky:", font=("Arial", 8))
     vytukavac_label.grid(row=3, column=1, pady=0)
@@ -252,9 +283,7 @@ def rozhrani_pocitac():
     
     # Spuštění programu
     p_okno.mainloop()
-    
 
-mobil = True  
 def zmnena_rozhrani():
     global mobil
     if mobil:
@@ -271,6 +300,7 @@ cas_stisku = 0
 cas_posledni_aktivity = time.time()  
 pocet_predelu_v_kuse = 3
 lomitko_zadanee = False
+doba_lomitka = 1
 
 def kontrola_pauzy():
     global cas_posledni_aktivity, cas_stisku, pocet_predelu_v_kuse, pauza, lomitko_zadanee, mobil
@@ -278,15 +308,17 @@ def kontrola_pauzy():
     pauza = nyni - cas_posledni_aktivity
     
     # Pokud uživatel nic nedělá déle než 1. sekundy, ukonči písmeno
-    if lomitko_zadanee and  pauza > 1 and pocet_predelu_v_kuse <3:
+    if lomitko_zadanee and  pauza > doba_lomitka and pocet_predelu_v_kuse <3:
         vstup2_pole.insert(tk.END, "/")      
         cas_posledni_aktivity = time.time() 
         pocet_predelu_v_kuse += 1
-    #opakovaní oddelovace
-    if mobil:
-        okno.after(100, kontrola_pauzy)
-    else:
-        p_okno.after(100, kontrola_pauzy)
-
+    #osetrené opakovaní oddelovace
+    try:
+        if mobil:
+            okno.after(100, kontrola_pauzy)
+        else:
+            p_okno.after(100, kontrola_pauzy)
+    except:
+        pass
     
 zozhrani_mobil()     
