@@ -75,6 +75,7 @@ def prevod_do_morse():
 def mazani_vse():
     vstup2_pole.delete("1.0", tk.END)
     vstup1_pole.delete("1.0", tk.END)
+    
   
 #promněnné
 mobil = True
@@ -118,7 +119,7 @@ def kopirovat_morse():
     okno_aktivni.clipboard_append(obsah)
     
 def zozhrani_mobil():
-    global vstup1_pole, vstup2_pole, okno
+    global vstup1_pole, vstup2_pole, okno, tlacitko_rezim, vstup1_label, vstup2_label, frame_tlacitka, vytukavac_label
     ##grafika a tlacitka
     # Vytvoření hlavního okna
     okno = tk.Tk()
@@ -134,14 +135,15 @@ def zozhrani_mobil():
     okno.grid_rowconfigure(5, weight=0)  # Textové pole (roztáhne se)
     
     okno.grid_columnconfigure(0, weight=1)  # Sloupec se roztáhne
-        # Tlačítko pro změnu rozhraní
+    
+    # Tlačítko pro změnu rozhraní
     tlacitko5 = tk.Button(text="změna rozhraní", bg="red", font=("Arial", 8), command=zmnena_rozhrani)
     tlacitko5.grid(row=0, column=0, pady=(10, 2))
-
-     # komentar roz
-    label = tk.Label(okno, text= mobil, font=("Arial", 5))
-    label.grid(row=0, column=1, pady=(10, 2))
-     
+    
+    #prepnou rezim buton
+    tlacitko_rezim = tk.Button(okno, text="🌙", bg="black", fg="white", font=("Arial", 8), command=prepnout_rezim)
+    tlacitko_rezim.grid(row=0, column=1, pady=(10, 2))
+    
     # Popisek pro vstup
     vstup1_label = tk.Label(okno, text="Text:", font=("Arial", 12))
     vstup1_label.grid(row=1, column=0, pady=(10, 2))
@@ -149,8 +151,9 @@ def zozhrani_mobil():
     # Vstupní textové pole - sticky="nsew" = roztáhne se na všechny strany
     vstup1_pole = tk.Text(okno, height=2, font=("Arial", 11))
     vstup1_pole.grid(row=2, column=0, padx=20, pady=5, sticky="ew")
+    
     #kopirovací tlac 1
-    tlacitko_kop1 = tk.Button(okno, text="📋 ", bg="lightyellow", font=("Arial", 8), command=kopirovat_text)
+    tlacitko_kop1 = tk.Button(okno, text="kop.", bg="lightyellow", font=("Arial", 4), command=kopirovat_text)
     tlacitko_kop1.grid(row=2, column=1, pady=(0, 40))
     
     # Frame pro tlačítka (aby byla vedle sebe)
@@ -158,15 +161,15 @@ def zozhrani_mobil():
     frame_tlacitka.grid(row=3, column=0, pady=8)
     
     # Tlačítko pro převod do morse 
-    tlacitko1 = tk.Button(frame_tlacitka, text="↓Do morse↓", bg="lightblue", font=("Arial", 11), command=prevod_do_morse)
+    tlacitko1 = tk.Button(frame_tlacitka, text="↓Do morse↓", bg="lightblue", font=("Arial", 10), command=prevod_do_morse)
     tlacitko1.pack(side="left", padx=5)
     
     # Tlačítko pro smazání všeho
-    tlacitko2 = tk.Button(frame_tlacitka, text="smazat", bg="salmon", font=("Arial", 11), command=mazani_vse)
+    tlacitko2 = tk.Button(frame_tlacitka, text="smazat", bg="salmon", font=("Arial", 10), command=mazani_vse)
     tlacitko2.pack(side="left", padx=5)
      
     # Tlačítko pro převod nba text
-    tlacitko3 = tk.Button(frame_tlacitka, text="↑Na text↑",  bg="lightblue", font=("Arial", 11), command=prevod_na_text)
+    tlacitko3 = tk.Button(frame_tlacitka, text="↑Na text↑",  bg="lightblue", font=("Arial", 10), command=prevod_na_text)
     tlacitko3.pack(side="left", padx=5)
      
     # Popisek pro výstup
@@ -177,7 +180,7 @@ def zozhrani_mobil():
     vstup2_pole = tk.Text(okno, height=5, font=("Courier", 10))
     vstup2_pole.grid(row=5, column=0, padx=20, pady=5, sticky="nsew")
     #kopirovaci tlac 2
-    tlacitko_kop2 = tk.Button(okno, text="📋", bg="lightyellow", font=("Arial", 8), command=kopirovat_morse)
+    tlacitko_kop2 = tk.Button(okno, text="kop.", bg="lightyellow", font=("Arial", 4), command=kopirovat_morse)
     tlacitko_kop2.grid(row=5, column=1, pady=(0, 70))
     
     # Popisek pro vytukavač
@@ -202,7 +205,7 @@ def zozhrani_mobil():
     okno.mainloop()
 
 def rozhrani_pocitac():
-    global vstup1_pole, vstup2_pole, p_okno
+    global vstup1_pole, vstup2_pole, p_okno, tlacitko_rezim, vstup1_label, vstup2_label, frame_tlacitka, vytukavac_label
     ##grafika a tlacitka
     # Vytvoření hlavního okna
     p_okno = tk.Tk()
@@ -218,14 +221,15 @@ def rozhrani_pocitac():
     p_okno.grid_rowconfigure(5, weight=1)  # Textové pole (roztáhne se)
 
     p_okno.grid_columnconfigure(0, weight=1)  # Sloupec se roztáhne
-        # Tlačítko pro změnu rozhraní
+    
+    # Tlačítko pro změnu rozhraní
     tlacitko5 = tk.Button(text="změna rozhraní", bg="salmon", font=("Arial", 11), command=zmnena_rozhrani)
     tlacitko5.grid(row=0, column=0, pady=(10, 2))
-
-     # komentar roz
-    label = tk.Label(p_okno, text= mobil, font=("Arial", 5))
-    label.grid(row=0, column=1, pady=(10, 2))
-     
+    
+    #prepnou rezim buton
+    tlacitko_rezim = tk.Button(p_okno, text="🌙", bg="black", fg="white", font=("Arial", 8), command=prepnout_rezim)
+    tlacitko_rezim.grid(row=0, column=1, pady=(10, 2))
+    
     # Popisek pro vstup
     vstup1_label = tk.Label(p_okno, text="Text:", font=("Arial", 12))
     vstup1_label.grid(row=1, column=0, pady=(10, 2))
@@ -233,6 +237,7 @@ def rozhrani_pocitac():
     # Vstupní textové pole - sticky="nsew" = roztáhne se na všechny strany
     vstup1_pole = tk.Text(p_okno, height=3, font=("Arial", 11))
     vstup1_pole.grid(row=2, column=0, padx=20, pady=5, sticky="ew")
+    
     #kopirovaci tlac 1
     tlacitko_kop1 = tk.Button(p_okno, text="📋", bg="lightyellow", font=("Arial", 8), command=kopirovat_text)
     tlacitko_kop1.grid(row=2, column=1,padx=(0, 150), pady=(0, 55))
@@ -284,6 +289,44 @@ def rozhrani_pocitac():
     # Spuštění programu
     p_okno.mainloop()
 
+tmavy_rezim = False
+BARVY_SVETLY = {
+    "bg": "#f0f0f0",
+    "fg": "black",
+    "pole_bg": "white",
+    "pole_fg": "black",
+    "lable_bg": "#f0f0f0",
+    "lable_fg": "black",
+    "tlacitko_bg": "#f0f0f0",
+    "button_bg": "black",
+    "button_fg": "white"}
+
+BARVY_TMAVY = {
+    "bg": "black",
+    "fg": "white",
+    "pole_bg": "#2d2d2d",
+    "pole_fg": "white",
+    "lable_bg": "black",
+    "lable_fg": "white",
+    "button_bg": "white",
+    "button_fg": "black"}
+
+def prepnout_rezim():
+    global tmavy_rezim, tlacitko_rezim, vstup1_label, vstup2_label, frame_tlacitka, vytukavac_label
+    tmavy_rezim = not tmavy_rezim
+    barvy = BARVY_TMAVY if tmavy_rezim else BARVY_SVETLY
+    okno_aktivni = okno if mobil else p_okno
+    
+    okno_aktivni.config(bg=barvy["bg"])
+    vstup1_pole.config(bg=barvy["pole_bg"], fg=barvy["pole_fg"], insertbackground=barvy["pole_fg"])
+    vstup2_pole.config(bg=barvy["pole_bg"], fg=barvy["pole_fg"], insertbackground=barvy["pole_fg"])
+    vstup2_label.config(bg=barvy["lable_bg"], fg=barvy["lable_fg"])
+    vstup1_label.config(bg=barvy["lable_bg"], fg=barvy["lable_fg"])
+    vytukavac_label.config(bg=barvy["lable_bg"], fg=barvy["lable_fg"])
+    frame_tlacitka.config(bg=barvy["bg"])
+    tlacitko_rezim.config(text="☀" if tmavy_rezim else "🌙")
+    tlacitko_rezim.config(bg=barvy["button_bg"], fg=barvy["button_fg"])
+    
 def zmnena_rozhrani():
     global mobil
     if mobil:
