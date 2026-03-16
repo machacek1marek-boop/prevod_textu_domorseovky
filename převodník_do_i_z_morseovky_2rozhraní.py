@@ -137,7 +137,7 @@ def zozhrani_mobil():
     okno.grid_columnconfigure(0, weight=1)  # Sloupec se roztáhne
     
     # Tlačítko pro změnu rozhraní
-    tlacitko5 = tk.Button(text="změna rozhraní", bg="red", font=("Arial", 8), command=zmnena_rozhrani)
+    tlacitko5 = tk.Button(okno, text="změna rozhraní", bg="red", font=("Arial", 8), command=zmnena_rozhrani)
     tlacitko5.grid(row=0, column=0, pady=(10, 2))
     
     #prepnou rezim buton
@@ -185,7 +185,7 @@ def zozhrani_mobil():
     
     # Popisek pro vytukavač
     vytukavac_label = tk.Label(okno, text="Tlačítko na zápis morseovky:", font=("Arial", 8))
-    vytukavac_label.grid(row=6, column=0, pady=(20, 2))
+    vytukavac_label.grid(row=6, column=0, pady=(100, 2))
     
     # Tlačítko pro zapis morse (vytukavac)
     vytukavac = tk.Button(okno, text="ťukej kod", bg="green", font=("Arial", 11))
@@ -223,7 +223,7 @@ def rozhrani_pocitac():
     p_okno.grid_columnconfigure(0, weight=1)  # Sloupec se roztáhne
     
     # Tlačítko pro změnu rozhraní
-    tlacitko5 = tk.Button(text="změna rozhraní", bg="salmon", font=("Arial", 11), command=zmnena_rozhrani)
+    tlacitko5 = tk.Button(p_okno, text="změna rozhraní", bg="salmon", font=("Arial", 11), command=zmnena_rozhrani)
     tlacitko5.grid(row=0, column=0, pady=(10, 2))
     
     #prepnou rezim buton
@@ -270,7 +270,7 @@ def rozhrani_pocitac():
     
 
     # Popisek pro vytukavač
-    vytukavac_label = tk.Label(p_okno, text="Tlačítko na zápis morseovky:", font=("Arial", 8))
+    vytukavac_label = tk.Label(p_okno, text="Tlačítko na zápis morseovky:", font=("Arial", 9))
     vytukavac_label.grid(row=3, column=1, pady=0)
 
     # Tlačítko pro zapis morse (vytukavac)
@@ -346,7 +346,7 @@ lomitko_zadanee = False
 doba_lomitka = 1
 
 def kontrola_pauzy():
-    global cas_posledni_aktivity, cas_stisku, pocet_predelu_v_kuse, pauza, lomitko_zadanee, mobil
+    global cas_posledni_aktivity, cas_stisku, pocet_predelu_v_kuse, lomitko_zadanee, mobil
     nyni = time.time()
     pauza = nyni - cas_posledni_aktivity
     
